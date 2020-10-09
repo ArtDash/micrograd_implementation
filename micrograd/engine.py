@@ -136,7 +136,7 @@ class Tensor:
     Tensor is very convenient when it comes to matrix multiplication,
     for example in Linear layers.
     """
-    def __init__(self, data: list):
+    def __init__(self, data):
         self.data = np.array(data)
 
     def __add__(self, other):
@@ -159,6 +159,9 @@ class Tensor:
     
     def __rmull__(self, other):
         return Tensor(other.data * self.data)
+
+    def transpose(self):
+        return Tensor(self.data.transpose())
 
     def exp(self):
         return Tensor(np.exp(self.data))
