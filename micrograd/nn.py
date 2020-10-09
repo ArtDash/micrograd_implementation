@@ -31,7 +31,7 @@ class Linear(Module):
 
     def forward(self, inp):
         """Y = W * x + b"""
-        return inp @ self.W.transpose() + self.b
+        return inp @ self.W + self.b
 
     def parameters(self):
         return [item for sublist in [self.W.parameters(), self.b] for item in sublist]
