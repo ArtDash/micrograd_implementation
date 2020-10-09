@@ -1,4 +1,5 @@
 import numpy as np
+from micrograd.engine import Value, Tensor
 
 
 class Module:
@@ -21,16 +22,19 @@ class Module:
 class Linear(Module):
     def __init__(self, in_features, out_features, bias: bool = True):
         """Initializing model"""
-        stdv = 1 / np.sqrt(in_features)
-        self.W = np.random.uniform(-stdv, stdv, size=(out_features, in_features))
-        self.b = np.random.uniform(-stdv, stdv, size=out_features) if bias == True else 0
+        stddev = 1 / np.sqrt(in_features)
+        row = [Value(item) for item in np.random.uniform(-stddev, stddev, size=out_features)]
+        matrix = Tensor([list(row) for _ in range(in_features)])
+
+        self.W = matrix
+        self.b = row if bias is True else 0
 
     def forward(self, inp):
         """Y = W * x + b"""
-        return inp @ self.W.T + self.b
+        return inp @ self.W.transpose() + self.b
 
     def parameters(self):
-        return [self.W, self.b]
+        return [item for sublist in [self.W.parameters(), self.b] for item in sublist]
 
 
 class ReLU(Module):
